@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Poké-Checker{% endblock %}
+
+{% block content %}
+
+<section class="hero my-class is-fullheight-with-navbar">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            {% if poke_name not in pokedex %}
+
+            <p class="title">"{{poke_name}}" doesn't exist in our database. <BR>Review your query and try again.</p>
+            <p class="subtitle">If you think this is a bug, please contact me via contact form (link will be added later).</p>
+
+            {% elif results.count > 0 %}
+
+            <p class="title">
+                You searched for {{poke_name}}.
+            </p>
+            <p class="subtitle">
+
+            <table class="table w-auto is-bordered is-hoverable is-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Pokémon name</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">League</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                <tr>
+                    <th scope="row">{{ result.name }}</th>
+
+                    {% if result.position <= 100 %}
+                    <td class="has-background-success">{{ result.position }}</td>
+                    {% elif result.position <= 200 %}
+                    <td class="has-background-warning">{{ result.position }}</td>
+                    {% else %}
+                    <td class="has-background-danger-dark">{{ result.position }}</td>
+                    {% endif %}
+                    <td>{{ result.league.name }}</td>
+
+
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+            <BR><BR><BR><BR>
+
+            {% else %}
+
+            <p class="title">0 results for {{poke_name}}.</p>
+            <p class="content">Looks like this Pokémon is useless.<BR>
+            If you're certain this is a bug, please contact me.</p>
+
+            {% endif %}
+
+
+            <p class="title mt-3">Check another Pokémon:</p>
+            <p>
+            <form method="POST" action="{% url 'results' %}">
+                <input class="search-hover search-click" list="Pokedex" name="poke_name"/>
+                <datalist id="Pokedex">
+                    {% for pokemon in pokemons %}
+                    <option>{{ pokemon.name }}</option>
+                    {% endfor %}
+                </datalist>
+                {% csrf_token %}
+                <button class="button icon-higher pikachu-yellow"><span class="icon"><i class="fa fa-search"></i></span><span>Search</span>
+                </button>
+            </form>
+            </p>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

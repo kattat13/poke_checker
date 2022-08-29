@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Poké-Checker{% endblock %}
+
+{% block content %}
+
+<section class="hero my-class is-fullheight-with-navbar">
+    <div class="hero-body">
+        <div class="container has-text-centered content">
+            <p class="title">
+                Welcome to Pokémon-Checker
+            </p>
+            <p class="subtitle pt-1">
+                Tired of searching through various databases and articles to know if your Pokémon is any good?<BR>
+                Should you leave it be in your storage or exchange it for candies?<BR>
+                Should you power it up to 1500 CP or 2500 or even higher?<BR>
+                Check here if your Pokémon is worth anything!
+            </p>
+            <p class="title mt-3">Pick your Pokémon:</p>
+
+            <form method="POST" action="{% url 'results' %}">
+                <input class="search-hover search-click" list="Pokedex" name="poke_name"/>
+                <datalist id="Pokedex">
+                    {% for pokemon in pokemons %}
+                    <option>{{ pokemon.name }}</option>
+                    {% endfor %}
+                </datalist>
+                {% csrf_token %}
+                <button class="button icon-higher pikachu-yellow"><span class="icon"><i class="fa fa-search"></i></span><span>Search</span>
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
